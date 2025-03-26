@@ -14,12 +14,16 @@ def main():
     parser = argparse.ArgumentParser(description="Run specific functions in MyScripts.")
     parser.add_argument("--test", action="store_true", help="Run the test function.")
     parser.add_argument("--adb", action="store_true", help="Run the adb function.")
+    parser.add_argument("--adb-data", action="store_true", help="Run pull the data out from the devices")
     parser.add_argument("--path", action="store_true", help="Run the add function")
     parser.add_argument("--proxy", action="store_true", help="Run the adding_to_path function.")
-    parser.add_argument("--do", action="store_true", help="Run the adding_to_path function.")
+    parser.add_argument("--data", action="store_true", help="Run the adding_to_path function.")
 
     args = parser.parse_args()
     Banner.print_big_jp()
+
+
+    
 
     if args.test:
         MyScripts.test()
@@ -29,6 +33,9 @@ def main():
         Path.input_data()
     elif args.adb:
         ADB.input_data()
+    elif getattr(args, "adb_data", False): 
+        ADB.pull_data()
+    
     else:
         # Interactive mode if no arguments are provided
         print("No argument provided. Choose an option:")
@@ -48,6 +55,7 @@ def main():
             Path.input_data()
         elif choice == "4":
             ADB.input_data()
+
         else:
             print("Invalid option. Exiting.")
 

@@ -35,6 +35,58 @@ class ADB:
             print("ADB not found. Ensure the path is correct.")
             return False
 
+    @staticmethod
+    def check_root() -> bool:
+        try:
+            subprocess.run(["adb", "root"], capture_output=True, text=True, check=True)
+            return True
+        except FileNotFoundError:
+            return False
+        except subprocess.CalledProcessError:
+            return False
+
+    @staticmethod
+    def pull_data():
+        if not ADB.check_root():
+            print(f"\033[91mThis device cannot be rooted! Bye! :<<<\033[0m")
+            return
+        
+        package_name = input("---> com.")
+        # Define package name and dump file details
+        package_name = f"com.{package_name}"
+
+
+        app_folder = "app_data"
+        sub_folder = ADB.date_insecs()
+
+        try:
+            os.makedirs(app_folder)
+        except FileExistsError:
+            pass
+
+            
+        try:
+            sub_folder = os.path.join(app_folder, ADB.date_insecs())
+            os.makedirs(sub_folder, exist_ok=True)
+            
+            cmd_write = f"adb pull /data/data/{package_name} {sub_folder}"
+            print(cmd_write)
+            result = subprocess.run(cmd_write, shell=True, capture_output=True, text=True)
+            print(result)
+
+            print("\n")
+            all_folder = os.path.join(sub_folder, package_name)
+            os.startfile(all_folder)
+            
+        except FileExistsError:
+            print(f"Directory '{app_folder}' or '{sub_folder} already exists.")
+        except PermissionError:
+            print(f"Permission denied: Unable to create '{app_folder}'.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        except FileNotFoundError:
+            print("ADB not found. Ensure the path is correct.")
+            
 
     @staticmethod
     def input_data():
@@ -81,6 +133,9 @@ class ADB:
             cmd_pull = f"adb pull {dump_file} {local_path}"
             subprocess.run(cmd_pull, shell=True)
 
+
             print(f"\033[92mHeap dump completed and pulled successfully. Path is in in this project directory in folder {local_path}.\033[0m")
+            os.startfile(local_path)
+
         else:
             print(f"\033[91mProcess {package_name} not found.\033[0m")
