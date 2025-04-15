@@ -1,5 +1,5 @@
 # jp_runner
-JP Runner is a Python script that provides useful tools for developers, such as changing the proxy server, pulling ADB data for testing, adding user paths, and retrieving dump files from mobile devices
+<<< HEAD JP Runner is a Python script that provides useful tools for developers, such as changing the proxy server, pulling ADB data for testing, adding user paths, and retrieving dump files from mobile devices
 
 
 
